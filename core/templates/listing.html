@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ page_title }} — Nexora{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/post-features.css' %}">{% endblock %}
+{% block content %}
+<section class="section-page">
+    <h1>{{ page_title }}</h1>
+    <p class="section-subtitle">Публикации Nexora по выбранной теме</p>
+    <form method="get" class="nexora-filters">
+        <input type="search" name="q" placeholder="Поиск в разделе" value="{{ search_query }}">
+        <select name="sort" aria-label="Сортировка">
+            <option value="new" {% if sort == 'new' %}selected{% endif %}>Новые</option>
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>По рейтингу</option>
+            <option value="views" {% if sort == 'views' %}selected{% endif %}>Популярные</option>
+        </select>
+        <button type="submit">Показать</button>
+    </form>
+    {% if posts %}
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-12 col-md-6 post-grid-item">{% include 'core/_post_card.html' %}</div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="empty-state">Здесь пока нет публикаций.</p>
+    {% endif %}
+</section>
+{% endblock %}

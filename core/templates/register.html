@@ -1,0 +1,165 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация — Nexora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-section auth-register">
+    <div class="auth-card auth-card-wide">
+        <div class="auth-heading">
+            <h1>Создать аккаунт</h1>
+            <p>Присоединяйся к Nexora и следи за миром технологий</p>
+        </div>
+
+        <form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-error" role="alert">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="auth-avatar-row">
+                <label for="avatar" class="auth-avatar-preview" id="avatarPreview">
+                    {{ form.first_name.value|default:'N'|first|upper }}
+                </label>
+
+                <div>
+                    <strong>Фотография профиля</strong>
+                    <label for="avatar" class="auth-avatar-select">Выбрать фото</label>
+                    <span>Необязательно, до 3 МБ</span>
+                    <input type="file" name="avatar" id="avatar"
+                           accept="image/png,image/jpeg,image/webp" hidden>
+                </div>
+            </div>
+
+            {% for error in form.avatar.errors %}
+                <div class="auth-field-error" role="alert">{{ error }}</div>
+            {% endfor %}
+
+            <div class="auth-fields-two">
+                <div class="auth-field">
+                    <label for="first_name">Имя</label>
+                    <input type="text" id="first_name" name="first_name"
+                           placeholder="Твоё имя"
+                           value="{{ form.first_name.value|default:'' }}"
+                           autocomplete="given-name" maxlength="150" required>
+
+                    {% for error in form.first_name.errors %}
+                        <div class="auth-field-error" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="auth-field">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" id="last_name" name="last_name"
+                           placeholder="Твоя фамилия"
+                           value="{{ form.last_name.value|default:'' }}"
+                           autocomplete="family-name" maxlength="150" required>
+
+                    {% for error in form.last_name.errors %}
+                        <div class="auth-field-error" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="auth-field">
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" name="email"
+                       placeholder="example@gmail.com"
+                       autocomplete="email" maxlength="150"
+                       value="{{ form.email.value|default:'' }}" required>
+
+                {% for error in form.email.errors %}
+                    <div class="auth-field-error" role="alert">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="auth-field">
+                <label for="password1">Пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password1" name="password1"
+                           placeholder="Придумай пароль"
+                           autocomplete="new-password" required>
+                    <button type="button" class="show-password" data-for="password1">Показать</button>
+                </div>
+
+                {% for error in form.password1.errors %}
+                    <div class="auth-field-error" role="alert">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="auth-field">
+                <label for="password2">Повтори пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password2" name="password2"
+                           placeholder="Повтори пароль"
+                           autocomplete="new-password" required>
+                    <button type="button" class="show-password" data-for="password2">Показать</button>
+                </div>
+
+                {% for error in form.password2.errors %}
+                    <div class="auth-field-error" role="alert">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="auth-submit">Зарегистрироваться</button>
+        </form>
+
+        <div class="auth-bottom">
+            <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.show-password').forEach(function(button) {
+    button.addEventListener('click', function() {
+        const input = document.getElementById(button.dataset.for);
+        if (!input) return;
+
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        button.textContent = show ? 'Скрыть' : 'Показать';
+        button.setAttribute('aria-label', show ? 'Скрыть пароль' : 'Показать пароль');
+    });
+});
+
+const avatar = document.getElementById('avatar');
+const avatarPreview = document.getElementById('avatarPreview');
+const firstName = document.getElementById('first_name');
+
+firstName.addEventListener('input', function() {
+    if (avatarPreview.querySelector('img')) return;
+    avatarPreview.textContent = this.value.trim().charAt(0).toUpperCase() || 'N';
+});
+
+avatar.addEventListener('change', function() {
+    const file = this.files[0];
+
+    if (!file) {
+        avatarPreview.textContent = firstName.value.trim().charAt(0).toUpperCase() || 'N';
+        return;
+    }
+
+    if (!file.type.startsWith('image/')) return;
+
+    const url = URL.createObjectURL(file);
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'Предпросмотр фото';
+    img.onload = () => URL.revokeObjectURL(url);
+    avatarPreview.replaceChildren(img);
+});
+</script>
+{% endblock %}

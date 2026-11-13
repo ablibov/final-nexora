@@ -1,0 +1,107 @@
+===================================================================
+                BUSINESS REQUIREMENTS DOCUMENT (BRD)
+                             Nexora
+===================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+* Project Goal: add more information diversity to the world by creating a new news website
+  I'm building new news website to add more productive news to the world
+* Target Audience: people and bloggers who need to find information about technology
+  Рeople who need to find information in the field of technology and software 24/7
+
+2. BUSINESS OBJECTIVES & PROBLEM STATEMENT
+------------------------------------------
+* Problem Statement: I am solving a problem in finding a quick source of information in the technology and software industry.
+  quick search for information in the field of technology
+* Business Goals: Add	one-time purchase (2$) to add post to the main page, and in search results it will be #1
+
+
+3. PROJECT SCOPE
+----------------
+* In-Scope: 
+  - Feature 1: Ranking and Rating for each article or blog
+  - Feature 2: Adding a blogs for each writer
+  - Feature 3: DM and black list
+  - Feature 4: Permissions and Roles
+  - Feature 5: Account Recovery and Deleting 
+  - Feature 6: Account privaty
+  - Feature 7: Searching authors, users, and post by filters and tags 
+  - Feature 8: Admin, Main Admin, and Moderators will had a special pin on there name
+  - Feature 9: Authors can made somebody their blog's moderator
+  - Feature 10: Adding a report to user
+  - Feature 11: Adding support
+  
+* Out-of-Scope: 
+  - Feature A: Traditional display ads and third-party advertising networks
+  - Feature B: Mandatory registration for reading articles
+  - Feature C: Video streaming or hosting platform
+  - Feature D: Live streaming
+  - Feature E: Voice calls and video calls in DM
+  - Feature F: Offline article reading and downloading articles for offline use
+
+4. REQUIREMENTS
+---------------
+    - Requirement 1: Users must be able to create an account using an email address.
+    - Requirement 2: The system must send a confirmation email upon successful registration.
+    - Requirement 3: Add a reader mode in which you can only read and cannot create blogs, respond to articles, or rate articles.
+    - Requirement 4: Registered authors must be able to create, edit, save as draft,
+      publish, and delete their own articles.
+    - Requirement 5: Every article must contain:
+      - Title
+      - Author
+      - Publication date
+      - Category
+      - Article content
+      - Rating
+      - Tags
+    - Requirement 6: Authors can pin the photo/video to the post
+    - Requirement 7: Adding report to user
+
+    - Performance: 
+         - Search must work as fast as it can
+         - Add DM
+         - Add "block author", so user will never see him in the news recommendation feed or in search and cant get messages in DM if he don't decade to unblock him
+         - Users will have avatar and banner with username. User must have username, but if they don't have avatar or banner they will get default avatar and blue banner
+
+    - Security: 
+      1. Add Email verification
+      2. Add phone verification
+      3. Add second password verification(3 is max)
+      4. Add reCAPTCHA to registration
+      5. Registration must contain:
+         - Password
+         - Email
+         - Name
+         - Username
+         - Date of Birth
+         - Gender
+         - reCAPTCHA
+         - 5 digital code comes to email
+      6. Add account ban
+      7. Add account recovery by email/phone
+      8. Add account deleting
+
+    - Usability: 
+      1. The app must be hybrid and mobile-friendly
+      2. The UI must be simple and understandable for newbies
+      3. The app must have search and filters
+      4. Search results must clearly display the article title, author, publication date, category, 
+         and rating.
+      5. The website must be accessible using keyboard navigation.
+      6. Add settings and private settings
+
+5. ASSUMPTIONS & CONSTRAINTS
+----------------------------
+* Assumptions: 
+1. User must have valid email
+2. Website will mainly be about technology
+3. Peoples can share it or use it in code as widget
+4. Main Admin can remove other admins, moderators, or ban users/authors
+5. How much time take it to read
+
+* Constraints:
+1. Can't rating blog or news without registration or login
+2. User can't register if he don't write the code from his mail, because of spam
+3. Admins can't remove other admins or main admin
+4. There can't be more than 1 Main Admin

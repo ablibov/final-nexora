@@ -1,0 +1,11 @@
+<a class="post-card-link" href="{{ post.get_absolute_url }}">
+    <article class="news news-small" style="--news-image: {% if post.image %}url('{{ post.image.url }}'){% else %}linear-gradient(135deg, #152a45, #5264bd){% endif %};">
+        <div class="news-content">
+            <div class="news-meta">
+                {{ post.get_category_display }} · {{ post.created_at|date:'d.m.Y' }} · 👁 {{ post.views_count }} · 👍 {{ post.likes_count }} · 👎 {{ post.dislikes_count }}
+            </div>
+            <h2>{{ post.name }}</h2>
+            <span class="post-card-author">{% if post.author %}{{ post.author.get_full_name|default:"Автор Nexora" }}{% else %}Редакция Nexora{% endif %}</span>
+        </div>
+    </article>
+</a>

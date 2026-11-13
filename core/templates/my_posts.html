@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Мои публикации — Nexora{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/post-features.css' %}">{% endblock %}
+{% block content %}
+<section class="editor-page">
+    <div class="nexora-page-header">
+        <div><h1>Мои публикации</h1><p>Статьи и черновики</p></div>
+        <a href="{% url 'post_create' %}" class="nexora-primary">+ Написать пост</a>
+    </div>
+    {% if messages %}{% for message in messages %}<p class="nexora-notice">{{ message }}</p>{% endfor %}{% endif %}
+    {% for post in posts %}
+        <div class="my-post-row">
+            <div>
+                <span class="post-status">{{ post.get_status_display }}</span>
+                <h2>{{ post.name }}</h2>
+                <small>👁 {{ post.views_count }} · 👍 {{ post.likes_count }} · 👎 {{ post.dislikes_count }} · {{ post.updated_at|date:'d.m.Y H:i' }}</small>
+            </div>
+            <div class="my-post-actions">
+                <a href="{% url 'post_detail' post.pk %}">Открыть</a>
+                <a href="{% url 'post_edit' post.pk %}">Изменить</a>
+                <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Удалить публикацию?')">
+                    {% csrf_token %}<button type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
+    {% empty %}
+        <p>Публикаций пока нет. <a href="{% url 'post_create' %}">Напиши первую!</a></p>
+    {% endfor %}
+</section>
+{% endblock %}

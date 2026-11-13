@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Подтверждение новой почты — Nexora{% endblock %}
+{% block content %}
+<section class="account-page settings-verify-page">
+  <a class="settings-back" href="{% url 'account_settings' %}">← Вернуться к настройкам</a>
+  <div class="settings-panel settings-verify-panel">
+    <span class="settings-kicker">NEXORA / VERIFICATION</span>
+    <h1>Подтверди новый email</h1>
+    <p>Мы отправили шестизначный код на <strong>{{ pending.new_email }}</strong>. Код действует 10 минут.</p>
+    {% if messages %}{% for message in messages %}<div class="settings-alert{% if message.tags %} is-{{ message.tags }}{% endif %}">{{ message }}</div>{% endfor %}{% endif %}
+    <form class="settings-form" method="post">
+      {% csrf_token %}<input type="hidden" name="action" value="verify">
+      {% for error in form.non_field_errors %}<div class="settings-error">{{ error }}</div>{% endfor %}
+      <div class="settings-field"><label for="id_code">Код подтверждения</label><input type="text" name="code" id="id_code" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" required autofocus>{% for error in form.code.errors %}<small class="settings-error">{{ error }}</small>{% endfor %}</div>
+      <button class="settings-primary" type="submit">Подтвердить email</button>
+    </form>
+    <div class="settings-verify-actions">
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="resend"><button class="settings-text-button" type="submit">Отправить код ещё раз</button></form>
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="cancel"><button class="settings-text-button" type="submit">Отменить смену почты</button></form>
+    </div>
+    <p class="settings-hint">Во время локальной разработки без настроенного SMTP код выводится в терминал Django, а не отправляется в настоящий почтовый ящик.</p>
+  </div>
+</section>
+{% endblock %}

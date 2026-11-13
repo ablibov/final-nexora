@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if is_search %}Поиск — Nexora{% else %}Nexora — технологии, новости, статьи и обзоры{% endif %}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/post-features.css' %}">{% endblock %}
+
+{% block content %}
+{% if is_search %}
+<section class="section-page">
+    <h1>Поиск публикаций</h1>
+    <form method="get" action="{% url 'index' %}" class="nexora-filters">
+        <input type="search" name="q" value="{{ search_query }}" placeholder="Название, текст, автор или тег">
+        <select name="category" aria-label="Раздел">
+            <option value="">Все разделы</option>
+            <option value="news" {% if category_filter == 'news' %}selected{% endif %}>Новости</option>
+            <option value="articles" {% if category_filter == 'articles' %}selected{% endif %}>Статьи</option>
+            <option value="reviews" {% if category_filter == 'reviews' %}selected{% endif %}>Обзоры</option>
+        </select>
+        {% if tag_filter %}<input type="hidden" name="tag" value="{{ tag_filter }}">{% endif %}
+        <select name="sort" aria-label="Сортировка">
+            <option value="new" {% if sort == 'new' %}selected{% endif %}>Новые</option>
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>По рейтингу</option>
+            <option value="views" {% if sort == 'views' %}selected{% endif %}>Популярные</option>
+        </select>
+        <button type="submit">Найти</button>
+    </form>
+    {% if tag_filter %}<p class="post-filter-label">Тег: #{{ tag_filter }} <a href="{% url 'index' %}">Сбросить</a></p>{% endif %}
+
+    {% if research_news %}
+    <div class="row">
+        {% for post in research_news %}
+        <div class="col-12 col-md-6 post-grid-item">{% include 'core/_post_card.html' %}</div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="empty-state">По запросу ничего не найдено.</p>
+    {% endif %}
+</section>
+{% else %}
+    {% if main_news %}
+        <a href="{{ main_news.get_absolute_url }}" class="post-card-link">
+            <section class="news" style="--news-image: {% if main_news.image %}url('{{ main_news.image.url }}'){% else %}linear-gradient(135deg, #152a45, #5264bd){% endif %};">
+                <div class="news-content">
+                    <div class="news-meta">
+                        {{ main_news.get_category_display }} · {{ main_news.created_at|date:'d.m.Y' }} · {{ main_news.views_count }} просмотров
+                    </div>
+                    <h2>{{ main_news.name }}</h2>
+                </div>
+            </section>
+        </a>
+        <section class="other_new">
+            <div class="row">
+                {% for post in other_news %}
+                    <div class="col-12 col-md-6 post-grid-item">{% include 'core/_post_card.html' %}</div>
+                {% endfor %}
+            </div>
+        </section>
+        {% if short_news %}
+        <section class="shorts-section">
+            <h2 class="section-heading">Ещё материалы</h2>
+            <div class="shorts">
+                {% for post in short_news %}
+                    <a href="{{ post.get_absolute_url }}" class="short-link">
+                        <div class="short" style="--short-image: {% if post.image %}url('{{ post.image.url }}'){% else %}linear-gradient(135deg, #152a45, #5264bd){% endif %};">
+                            <p>{{ post.name }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    {% else %}
+        <section class="section-page">
+            <h1>Nexora</h1>
+            <p class="empty-state">Публикаций пока нет.</p>
+        </section>
+    {% endif %}
+{% endif %}
+{% endblock %}
